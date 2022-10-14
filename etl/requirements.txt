@@ -1,0 +1,13 @@
+backoff==2.2.1
+certifi==2022.9.24
+elastic-transport==8.4.0
+elasticsearch==7.7.0
+flake8==5.0.4
+mccabe==0.7.0
+psycopg2==2.9.4
+pycodestyle==2.9.1
+pydantic==1.10.2
+pyflakes==2.5.0
+python-dotenv==0.21.0
+typing_extensions==4.4.0
+urllib3==1.26.12
