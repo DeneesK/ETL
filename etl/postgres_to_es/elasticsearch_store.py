@@ -1,9 +1,12 @@
 import time
+from typing import Iterator, Tuple
+
 import backoff
 from elasticsearch import Elasticsearch, helpers
 
 from config import BACKOFF_CONFIG, ES_HOST, logger
 from state_handler import State
+from models import MoviesES
 
 es = Elasticsearch([ES_HOST])
 
@@ -12,7 +15,7 @@ class EsIndexCreator:
     def __init__(self, es_object: Elasticsearch = es) -> None:
         self.es_object = es_object
 
-    def create_index(self, settings: dict, index) -> None:
+    def create_index(self, settings: dict, index: str) -> None:
         """
         Создаем индекс movies, метод принимает settings - настройки индекса
         и index -название самого индекса
@@ -53,7 +56,7 @@ class ElasticLoader:
 
     @backoff.on_exception(backoff.expo, **BACKOFF_CONFIG)
     def create_docs(
-        self, data, index: str, itersize: int = 999
+        self, data: Iterator[Tuple[MoviesES, str]], index: str, itersize: int = 999
     ):
         """
         Возвращает итератор документов для Elasticsearch.
@@ -70,7 +73,7 @@ class ElasticLoader:
             i += 1
             last_updated_at = updated_at
 
-            yield movie
+            yield movie.json()
 
             if i % itersize == 0:
                 self.state.set_state(key, last_updated_at)
@@ -80,7 +83,7 @@ class ElasticLoader:
             self.state.set_state(key, last_updated_at)
 
     @backoff.on_exception(backoff.expo, **BACKOFF_CONFIG)
-    def upload_data(self, data, index: str, itersize: int = 999) -> None:
+    def upload_data(self, data: Iterator[Tuple[MoviesES, str]], index: str, itersize: int = 999) -> None:
         """Загружает данные в ES используя итератор"""
         t = time.perf_counter()
 

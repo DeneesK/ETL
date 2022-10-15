@@ -1,6 +1,9 @@
+import os
 import abc
 import json
 from typing import Any, Optional
+
+from config import logger
 
 
 class BaseStorage:
@@ -24,11 +27,15 @@ class JsonFileStorage(BaseStorage):
             json.dump(state, file)
 
     def retrieve_state(self) -> dict:
-        with open(self.file_path, 'r') as file:
-            data = json.load(file)
-        if not data:
-            return {}
-        return data
+        if os.path.isfile(self.file_path):
+            try:
+                with open(self.file_path, 'r') as file:
+                    data = json.load(file)
+            except Exception as ex:
+                logger.error(ex)
+            return data
+        return {}
+        
 
 
 class State:

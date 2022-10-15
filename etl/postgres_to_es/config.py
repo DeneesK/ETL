@@ -2,6 +2,7 @@ import os
 import json
 import logging
 from logging.handlers import RotatingFileHandler
+
 from dotenv import load_dotenv
 from psycopg2.errors import Error
 from elasticsearch import exceptions
@@ -29,7 +30,7 @@ dsl = {
     'port': os.environ.get('DB_PORT'),
 }
 
-ES_HOST = os.environ.get('ES_HOST_POSRT')
+ES_HOST = os.environ.get('ES_HOST')
 
 BACKOFF_CONFIG = {
     "exception": (Error, exceptions.ConnectionError),

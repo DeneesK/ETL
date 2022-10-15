@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import List, Optional
 from uuid import UUID
+
 from pydantic import BaseModel, validator
 
 
@@ -28,6 +29,7 @@ class PersonsES(PersonFilm):
 
 
 class MoviesES(AbstractModel):
+    _id : UUID
     title: str
     imdb_rating: Optional[float] = None
     description: Optional[str] = None

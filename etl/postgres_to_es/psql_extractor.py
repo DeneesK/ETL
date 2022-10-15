@@ -1,4 +1,5 @@
 from typing import Optional
+
 import backoff
 import psycopg2
 from psycopg2.extensions import connection as pg_conn
@@ -40,6 +41,5 @@ class PostgresExtractor:
         cur.execute(query)
 
         for row in cur:
-            instance = model(**row).dict()
-            instance["_id"] = instance["id"]
+            instance = model(**row)
             yield instance, str(row["updated_at"])

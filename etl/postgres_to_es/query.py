@@ -8,6 +8,7 @@ def get_query(load_from: Optional[str]) -> str:
 
     return f"""
 SELECT film.id,
+    film.id as _id,
     film.rating AS imdb_rating,
     film.title,
     film.description,
