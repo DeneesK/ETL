@@ -1,0 +1,23 @@
+version: '3'
+services:    
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.7.0
+    env_file: 
+      - ./postgres_to_es/.env
+    ports: 
+      - "9200:9200"
+
+  db:
+    image: postgres:13
+    volumes:
+      - $HOME/postgresql/data:/var/lib/postgresql/data/
+    env_file: 
+      - ./postgres_to_es/.env
+  etl:
+    build: postgres_to_es
+    env_file: 
+      - ./postgres_to_es/.env
+    depends_on:
+      - elasticsearch
+      - db
+    command: python3 ./server.py

@@ -72,8 +72,9 @@ class ElasticLoader:
         for movie, updated_at in data:
             i += 1
             last_updated_at = updated_at
-
-            yield movie.json()
+            movies_data = movie.dict()
+            movies_data['_id'] = movies_data['id']
+            yield movies_data
 
             if i % itersize == 0:
                 self.state.set_state(key, last_updated_at)

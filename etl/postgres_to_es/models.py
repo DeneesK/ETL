@@ -29,7 +29,6 @@ class PersonsES(PersonFilm):
 
 
 class MoviesES(AbstractModel):
-    _id : UUID
     title: str
     imdb_rating: Optional[float] = None
     description: Optional[str] = None
