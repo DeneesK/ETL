@@ -23,8 +23,11 @@ class JsonFileStorage(BaseStorage):
         self.file_path = file_path
 
     def save_state(self, state: dict) -> None:
-        with open(self.file_path, 'w') as file:
-            json.dump(state, file)
+        try:
+            with open(self.file_path, 'w') as file:
+                json.dump(state, file)
+        except Exception as ex:
+                logger.error(ex)       
 
     def retrieve_state(self) -> dict:
         if os.path.isfile(self.file_path):
